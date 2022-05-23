@@ -1,0 +1,8 @@
+INSERT INTO employees
+VALUES
+
+INSERT INTO departments
+VALUES
+
+INSERT INTO roles
+VALUES
