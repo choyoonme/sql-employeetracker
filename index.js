@@ -71,6 +71,7 @@ function viewAllEmployees() {
         .query('SELECT first_name, last_name FROM employees;',
             function (err, results) {
                 if (err) throw err
+                console.table(results)
                 prompt();
             })
 };
@@ -80,6 +81,7 @@ function viewByDepartment() {
     connection.query('SELECT department_name FROM departments;',
         function (err, results) {
             if (err) throw err
+            console.table(results)
             prompt();
         })
 };
@@ -89,6 +91,7 @@ function viewByRole() {
     connection.query('SELECT title_name FROM roles;',
         function (err, results) {
             if (err) throw err
+            console.table(results)
             prompt();
         })
 };
@@ -138,7 +141,8 @@ async function addEmployee() {
     ])
     connection.query(`INSERT INTO employees(first_name, last_name, roles_id, manager_id) VALUES ('${answers.firstName}', '${answers.lastName}' ,'${answers.role}','${answers.manager}');`,
         function (err, results) {
-            if (err) throw err;
+            if (err) throw err
+            console.table(results)
         });
     connection.end();
 };
@@ -178,12 +182,26 @@ async function addRole() {
     ])
     connection.query(`INSERT INTO roles(title_name, salary, departments_id) VALUES ('${answers.titleName}', '${answers.salary}','${answers.departmentID}');`,
         function (err, results) {
-            if (err) throw err;
+            if (err) throw err
+            console.table(results)
         });
     connection.end();
 };
 
 
 //add department
-
+async function addDepartment() {
+    const answers = await inquirer.prompt([
+        {
+            type: 'input',
+            name: 'addDept',
+            message: 'Enter Department Name:'
+        }
+    ])
+    connection.query(`INSERT INTO departments (department_name) VALUEs ('${answers.addDept}');`,
+        function (err, results) {
+            if (err) throw err
+            console.table(results)
+        });
+};
 //exit
