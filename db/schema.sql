@@ -12,7 +12,7 @@ CREATE TABLE departments (
 CREATE TABLE roles (
     id SERIAL NOT NULL,
     title_name VARCHAR(50) NOT NULL,
-    salary DECIMAL NOT NULL,
+    salary INT NOT NULL,
     departments_id INT,
     PRIMARY KEY (id)
  );
@@ -22,6 +22,6 @@ CREATE TABLE roles (
      first_name VARCHAR(30) NOT NULL,
      last_name VARCHAR(30) NOT NULL,
      roles_id INT,
-     manager_id INT NULL,
+     manager_id INT,
      PRIMARY KEY (id)
  );

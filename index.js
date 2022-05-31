@@ -71,7 +71,6 @@ function viewAllEmployees() {
         .query('SELECT first_name, last_name FROM employees;',
             function (err, results) {
                 if (err) throw err
-                console.table(results)
                 prompt();
             })
 };
@@ -81,7 +80,6 @@ function viewByDepartment() {
     connection.query('SELECT department_name FROM departments;',
         function (err, results) {
             if (err) throw err
-            console.table(results)
             prompt();
         })
 };
@@ -91,7 +89,6 @@ function viewByRole() {
     connection.query('SELECT title_name FROM roles;',
         function (err, results) {
             if (err) throw err
-            console.table(results)
             prompt();
         })
 };
@@ -139,16 +136,52 @@ async function addEmployee() {
         },
 
     ])
-    connection.query(`INSERT INTO employees(first_name, last_name, roles_id, manager_id) VALUES ('${answers.firstName}', '${answers.lastName}' ,'${answers.role}','${answers.manager}'
-    );`, function (err, results) {
-        if (err) throw err;
-        console.table(results)
-    });
+    connection.query(`INSERT INTO employees(first_name, last_name, roles_id, manager_id) VALUES ('${answers.firstName}', '${answers.lastName}' ,'${answers.role}','${answers.manager}');`,
+        function (err, results) {
+            if (err) throw err;
+        });
     connection.end();
 };
 
 
 //add role
+async function addRole() {
+    const answers = await inquirer.prompt([
+        {
+            type: 'input',
+            name: 'titleName',
+            message: 'Enter Name of Title:'
+        },
+        {
+            type: 'list',
+            name: 'salary',
+            message: 'Select Figure:',
+            choices: [
+                '100000',
+                '90000',
+                '80000',
+                '75000',
+                '40000'
+            ]
+        },
+        {
+            type: 'list',
+            name: 'departmentID',
+            message: 'Select Department',
+            choices: [
+                { value: 1, name: 'Administrative' },
+                { value: 2, name: 'Technical Services' },
+                { value: 3, name: 'Public Services' },
+                { value: 4, name: 'Support Staff' }
+            ]
+        }
+    ])
+    connection.query(`INSERT INTO roles(title_name, salary, departments_id) VALUES ('${answers.titleName}', '${answers.salary}','${answers.departmentID}');`,
+        function (err, results) {
+            if (err) throw err;
+        });
+    connection.end();
+};
 
 
 //add department
