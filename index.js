@@ -113,28 +113,43 @@ async function addEmployee() {
         {
             type: 'list',
             name: 'role',
-            message: 'Choose Role:',
+            message: 'Choose Role ID:',
             choices: [
-                'Library Director',
-                'Systems & Metadata Librarian',
-                'Access Services Librarian',
-                'Electronic Resources & Serials Librarian',
-                'Reference Librarian',
-                'Assistant Librarian',
-                'Library Clerk'
+                { value: 1, name: 'Library Director' },
+                { value: 2, name: 'Head of Technical Services' },
+                { value: 3, name: 'Systems & Metadata Librarian' },
+                { value: 4, name: 'Head of Access Services' },
+                { value: 5, name: 'Electronic Resources & Serials Librarian' },
+                { value: 6, name: 'Reference Librarian' },
+                { value: 7, name: 'Library Clerk' }
             ]
         },
         {
             type: 'list',
             name: 'manager',
-            message: 'Select Manager:',
-            choices: ''
-        }
+            message: 'Select Manager ID:',
+            choices: [
+                { value: 1, name: 'Library Director' },
+                { value: 2, name: 'Head of Technical Services' },
+                { value: 3, name: 'Head of Access Services' },
+                { value: 4, name: 'Systems & Metadata Librarian' },
+                { value: 5, name: 'Electronic Resources & Serials Librarian' },
+                { value: 0, name: 'none' }
+            ]
+        },
+
     ])
+    connection.query(`INSERT INTO employees(first_name, last_name, roles_id, manager_id) VALUES ('${answers.firstName}', '${answers.lastName}' ,'${answers.role}','${answers.manager}'
+    );`, function (err, results) {
+        if (err) throw err;
+        console.table(results)
+    });
+    connection.end();
 };
 
 
 //add role
+
 
 //add department
 

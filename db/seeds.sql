@@ -11,10 +11,6 @@ VALUES (1,'Claude', 'Monet', 1, 1),
 (10, 'Eugene', 'Delacroix', 5, 2);
 
 
-
-
-
-
 INSERT INTO departments (id, department_name)
 VALUES (1, 'Administrative'),
 (2, 'Technical Services'),
@@ -24,12 +20,12 @@ VALUES (1, 'Administrative'),
 
 INSERT INTO roles (id, title_name, salary, departments_id)
 VALUES (1, 'Library Director', 100000, 1),
-(2, 'Head of Technical Services', 90000, 1)
+(2, 'Head of Technical Services', 90000, 1),
 (3, 'Systems & Metadata Librarian', 80000, 2),
-(4, 'Head of Access Services Librarian', 75000, 3),
+(4, 'Head of Access Services', 75000, 3),
 (5, 'Electronic Resources & Serials Librarian', 75000, 2),
 (6, 'Reference Librarian', 75000, 3),
-(7, 'Library Clerk', 40000, 3);
+(7, 'Library Clerk', 40000, 4);
 
 
 
