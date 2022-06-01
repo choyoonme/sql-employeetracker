@@ -77,7 +77,9 @@ async function prompt() {
 function viewAllEmployees() {
     connection
         .query(
-            `SELECT id, first_name, last_name FROM employees ORDER BY last_name;`,
+            `SELECT first_name, last_name 
+            FROM employees 
+            ORDER BY last_name;`,
             function (err, results) {
                 if (err) throw err
                 console
@@ -90,7 +92,12 @@ function viewAllEmployees() {
 function viewByDepartment() {
     connection
         .query(
-            `SELECT employees.first_name, employees.last_name, departments.department_name FROM roles JOIN departments ON departments.id = roles.departments_id JOIN employees ON employees.roles_id = roles.id;`,
+            `SELECT employees.first_name, employees.last_name, departments.department_name 
+            FROM roles 
+            JOIN departments 
+            ON departments.id = roles.departments_id 
+            JOIN employees 
+            ON employees.roles_id = roles.id;`,
             function (err, results) {
                 if (err) throw err
                 console
@@ -103,7 +110,10 @@ function viewByDepartment() {
 function viewByRole() {
     connection
         .query(
-            `SELECT employees.first_name, employees.last_name, roles.title_name FROM employees JOIN roles ON employees.roles_id = roles.id;`,
+            `SELECT employees.first_name, employees.last_name, roles.title_name 
+            FROM employees 
+            JOIN roles 
+            ON employees.roles_id = roles.id;`,
             function (err, results) {
                 if (err) throw err
                 console
@@ -111,7 +121,7 @@ function viewByRole() {
                 prompt();
             })
 };
-// mysql> SELECT employees.first_name, employees.last_name, roles.title FROM employees INNER JOIN roles ON employees.role_id = roles.id;
+
 //add new employee
 async function addEmployee() {
     const answers = await inquirer
@@ -158,7 +168,8 @@ async function addEmployee() {
         ])
     connection
         .query(
-            `INSERT INTO employees(first_name, last_name, roles_id, manager_id) VALUES ('${answers.firstName}', '${answers.lastName}' ,'${answers.role}','${answers.manager}');`,
+            `INSERT INTO employees(first_name, last_name, roles_id, manager_id) 
+            VALUES ('${answers.firstName}', '${answers.lastName}' ,'${answers.role}','${answers.manager}');`,
             function (err, results) {
                 if (err) throw err
                 console
@@ -204,7 +215,8 @@ async function addRole() {
         ])
     connection
         .query(
-            `INSERT INTO roles(title_name, salary, departments_id) VALUES ('${answers.titleName}', '${answers.salary}','${answers.departmentID}');`,
+            `INSERT INTO roles(title_name, salary, departments_id) 
+            VALUES ('${answers.titleName}', '${answers.salary}','${answers.departmentID}');`,
             function (err, results) {
                 if (err) throw err
                 console
@@ -227,7 +239,8 @@ async function addDepartment() {
         ])
     connection
         .query(
-            `INSERT INTO departments (department_name) VALUEs ('${answers.addDept}');`,
+            `INSERT INTO departments (department_name) 
+            VALUES ('${answers.addDept}');`,
             function (err, results) {
                 if (err) throw err
                 console
@@ -248,7 +261,10 @@ function updateEmployee() {
         ]);
     connection
         .query(
-            `SELECT employees.last_name, roles.title FROM employees JOIN roles ON employees.role_id = roles.id;`,
+            `SELECT employees.last_name, roles.title 
+            FROM employees 
+            JOIN roles 
+            ON employees.role_id = roles.id;`,
             function (err, results) {
                 if (err) throw err
                 console
