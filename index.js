@@ -10,6 +10,7 @@ connection.connect(function (err, results) {
         throw err;
     
 
+
     prompt();
 });
 
@@ -66,6 +67,7 @@ function viewAllEmployees() {
             throw err;
         
 
+
         console.table(results);
         prompt();
     });
@@ -83,6 +85,7 @@ function viewByDepartment() {
             throw err;
         
 
+
         console.table(results);
         prompt();
     });
@@ -97,6 +100,7 @@ function viewByRole() {
         if (err) 
             throw err;
         
+
 
         console.table(results);
         prompt();
@@ -189,6 +193,7 @@ async function addEmployee() {
             throw err;
         
 
+
         console.table(results);
     });
     connection.end();
@@ -238,6 +243,7 @@ async function addRole() {
             throw err;
         
 
+
         console.table(results);
     });
     connection.end();
@@ -258,58 +264,39 @@ async function addDepartment() {
             throw err;
         
 
+
         console.table(results);
     });
 }
 
 // update employee
 function updateEmployee() {
-    connection.query("SELECT employees.last_name, roles.title_name FROM employees JOIN roles ON employees.roles_id = roles.id;", function (err, results) {
-        if (err) 
-            throw err;
-        
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'updateEmployee',
+            message: 'Enter ID of Employee to Update:'
+
+        }, {
+            type: 'input',
+            name: "updateRole",
+            message: "Enter New Role ID:"
+        },
+    ]).then(function (results) {
+        const updateEmployee = results.updateEmployee;
+        const updateRole = results.updateRole;
+        const queryUpdate = `UPDATE employees 
+        SET roles_id = '${updateRole}' 
+        WHERE id = '${updateEmployee}'`;
+        connection.query(queryUpdate, function (err, results) {
+            if (err) 
+                throw err;
+            
+
+        })
+
 
         console.table(results);
-        inquirer.prompt([
-            {
-                type: "list",
-                name: "updateName",
-                message: "Choose Employee to Update:",
-                choices: [
-                    // map array of results
-                ]
-            }, {
-                type: "list",
-                name: "title",
-                message: "Choose New Title:",
-                choices: [
-                    {
-                        value: 1,
-                        name: "Library Director"
-                    },
-                    {
-                        value: 2,
-                        name: "Head of Technical Services"
-                    },
-                    {
-                        value: 3,
-                        name: "Systems & Metadata Librarian"
-                    },
-                    {
-                        value: 4,
-                        name: "Head of Access Services"
-                    }, {
-                        value: 5,
-                        name: "Electronic Resources & Serials Librarian"
-                    }, {
-                        value: 6,
-                        name: "Reference Librarian"
-                    }, {
-                        value: 7,
-                        name: "Library Clerk"
-                    },
-                ]
-            },
-        ]);
+        prompt();
     });
 }
