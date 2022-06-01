@@ -61,6 +61,9 @@ async function prompt() {
                 case 'Add Department':
                     addDepartment();
                     break;
+                case 'Update Employee':
+                    updateEmployee();
+                    break;
                 case 'EXIT':
                     connection
                         .end();
@@ -233,3 +236,22 @@ async function addDepartment() {
 };
 
 //update employee
+function updateEmployee() {
+    const answers = inquirer
+        .prompt([
+            {
+                type: 'list',
+                name: 'updateEmployee',
+                message: 'Choose Employee to Update:',
+                choices: []
+            }
+        ]);
+    connection
+        .query(
+            `SELECT employees.last_name, roles.title FROM employees JOIN roles ON employees.role_id = roles.id;`,
+            function (err, results) {
+                if (err) throw err
+                console
+                    .table(results)
+            });
+};
