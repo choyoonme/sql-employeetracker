@@ -2,16 +2,16 @@ INSERT INTO
 employees 
 (id, first_name, last_name, roles_id, manager_id)
 VALUES 
-(1,'Claude', 'Monet', 1, 1),
-(2, 'Paul', 'Cezanne', 5, 2),
-(3, 'Pierre-Auguste', 'Renoir', 6, 4),
-(4, 'Edouard', 'Manet', 3, 2),
-(5, 'Paul', 'Gaughin', 7, 4),
+(1,'Claude', 'Monet', 1, NULL),
+(2, 'Paul', 'Cezanne', 5, 6),
+(3, 'Pierre-Auguste', 'Renoir', 6, 7),
+(4, 'Edouard', 'Manet', 3, 6),
+(5, 'Paul', 'Gaughin', 7, 7),
 (6, 'Henri', 'Matisse', 2, 1),
 (7, 'Georges', 'Seurat', 4, 1),
-(8, 'Henri', 'Rousseau', 7, 4),
-(9, 'Georges', 'Braque', 6, 4),
-(10, 'Eugene', 'Delacroix', 5, 2);
+(8, 'Henri', 'Rousseau', 7, 7),
+(9, 'Georges', 'Braque', 6, 7),
+(10, 'Eugene', 'Delacroix', 5, 6);
 
 
 INSERT INTO 

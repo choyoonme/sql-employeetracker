@@ -2,7 +2,6 @@
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
 require('console.table');
-
 const connection = mysql
     .createConnection(
         {
@@ -13,9 +12,7 @@ const connection = mysql
 
 //connect and call prompt function
 connection
-    .connect();
-connection
-    .query(`SELECT * FROM employees`,
+    .connect(
         function (err, results) {
             if (err) throw err
             prompt();
@@ -36,6 +33,7 @@ async function prompt() {
                     'Add New Employee',
                     'Add Role',
                     'Add Department',
+                    'Update Employee',
                     'Exit'
                 ]
             }
@@ -77,9 +75,15 @@ async function prompt() {
 function viewAllEmployees() {
     connection
         .query(
-            `SELECT first_name, last_name 
-            FROM employees 
-            ORDER BY last_name;`,
+            `SELECT employees.id, employees.first_name, employees.last_name, roles.title_name, departments.department_name 
+            AS departments, roles.salary, 
+            CONCAT (managers.first_name, " ", managers.last_name) 
+            AS manager 
+            FROM employees
+            LEFT JOIN roles 
+            ON employees.roles_id = roles.id
+            LEFT JOIN departments ON roles.departments_id = departments.id
+            LEFT JOIN employees managers ON employees.manager_id = managers.id;`,
             function (err, results) {
                 if (err) throw err
                 console
@@ -92,7 +96,7 @@ function viewAllEmployees() {
 function viewByDepartment() {
     connection
         .query(
-            `SELECT employees.first_name, employees.last_name, departments.department_name 
+            `SELECT employees.id, employees.first_name, employees.last_name, departments.department_name 
             FROM roles 
             JOIN departments 
             ON departments.id = roles.departments_id 
@@ -110,7 +114,7 @@ function viewByDepartment() {
 function viewByRole() {
     connection
         .query(
-            `SELECT employees.first_name, employees.last_name, roles.title_name 
+            `SELECT employees.id, employees.first_name, employees.last_name, roles.title_name 
             FROM employees 
             JOIN roles 
             ON employees.roles_id = roles.id;`,
@@ -140,7 +144,7 @@ async function addEmployee() {
             {
                 type: 'list',
                 name: 'role',
-                message: 'Choose Role ID:',
+                message: 'Choose Role:',
                 choices: [
                     { value: 1, name: 'Library Director' },
                     { value: 2, name: 'Head of Technical Services' },
@@ -154,7 +158,7 @@ async function addEmployee() {
             {
                 type: 'list',
                 name: 'manager',
-                message: 'Select Manager ID:',
+                message: 'Select Manager:',
                 choices: [
                     { value: 1, name: 'Library Director' },
                     { value: 2, name: 'Head of Technical Services' },
@@ -190,16 +194,9 @@ async function addRole() {
                 message: 'Enter Name of Title:'
             },
             {
-                type: 'list',
+                type: 'input',
                 name: 'salary',
-                message: 'Select Figure:',
-                choices: [
-                    '100000',
-                    '90000',
-                    '80000',
-                    '75000',
-                    '40000'
-                ]
+                message: 'Enter Salary:',
             },
             {
                 type: 'list',
@@ -250,24 +247,44 @@ async function addDepartment() {
 
 //update employee
 function updateEmployee() {
-    const answers = inquirer
-        .prompt([
-            {
-                type: 'list',
-                name: 'updateEmployee',
-                message: 'Choose Employee to Update:',
-                choices: []
-            }
-        ]);
     connection
-        .query(
-            `SELECT employees.last_name, roles.title 
-            FROM employees 
-            JOIN roles 
-            ON employees.role_id = roles.id;`,
-            function (err, results) {
-                if (err) throw err
-                console
-                    .table(results)
-            });
-};
+    .query(
+        'SELECT employees.last_name, roles.title_name FROM employees JOIN roles ON employees.roles_id = roles.id;', function(err, results) {
+         if (err) throw err
+         console.table(results)
+const answers = inquirer
+        .prompt([
+    {
+        type: "rawlist",
+        name: "lastName",
+        message: 'Update Last Name of Employee:',
+        choices: function() 
+        {
+        var lastName = [];
+        for (var i = 0; i < results.length; i++) {
+            lastName.push(results[i].last_name);
+        }
+        return lastName;
+        }
+    },
+    {
+        type:'rawlist',
+        name:'title',
+        message:'Select Title:',
+        choices: function() 
+        {
+        var title = [];
+        for (var i = 0; i < results.length; i ++) {
+            title.push(results[i].title_name);
+        }
+        return title;
+        }
+    },
+    {
+        type:'confirm',
+        name:'end',
+        message:'View update?'
+    }
+    ]); 
+
+    })};
