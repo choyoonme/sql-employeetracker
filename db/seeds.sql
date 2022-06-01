@@ -22,7 +22,7 @@ INSERT INTO roles (id, title_name, salary, departments_id)
 VALUES (1, 'Library Director', 100000, 1),
 (2, 'Head of Technical Services', 90000, 1),
 (3, 'Systems & Metadata Librarian', 80000, 2),
-(4, 'Head of Access Services', 75000, 3),
+(4, 'Head of Access Services', 75000, 1),
 (5, 'Electronic Resources & Serials Librarian', 75000, 2),
 (6, 'Reference Librarian', 75000, 3),
 (7, 'Library Clerk', 40000, 4);
