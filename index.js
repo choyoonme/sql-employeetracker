@@ -6,9 +6,9 @@ const connection = mysql.createConnection({host: "localhost", user: "root", data
 
 // connect and call prompt function
 connection.connect(function (err, results) {
-    if (err) 
-        throw err;
-    
+    if (err) {
+        throw err
+    };
 
 
     prompt();
@@ -22,21 +22,21 @@ async function prompt() {
             message: "Choose action:",
             choices: [
                 "View All Employees",
-                "View By Department",
-                "View By Role",
+                "View All Departments",
+                "View All Roles",
                 "Add New Employee",
                 "Add Role",
                 "Add Department",
                 "Update Employee",
-                "Exit",
+                "EXIT",
             ]
         },]).then((answers) => {
         switch (answers.choice) {
             case "View All Employees": viewAllEmployees();
                 break;
-            case "View By Department": viewByDepartment();
+            case "View All Departments": viewAllDepartments();
                 break;
-            case "View By Role": viewByRole();
+            case "View All Roles": viewAllRoles();
                 break;
             case "Add New Employee": addEmployee();
                 break;
@@ -46,9 +46,10 @@ async function prompt() {
                 break;
             case "Update Employee": updateEmployee();
                 break;
-            case "EXIT": connection.end();
+            case "EXIT": leaveApp();
                 break;
         }
+
     });
 }
 
@@ -63,9 +64,9 @@ function viewAllEmployees() {
             ON employees.roles_id = roles.id
             LEFT JOIN departments ON roles.departments_id = departments.id
             LEFT JOIN employees managers ON employees.manager_id = managers.id;`, function (err, results) {
-        if (err) 
-            throw err;
-        
+        if (err) {
+            throw err
+        };
 
 
         console.table(results);
@@ -74,16 +75,16 @@ function viewAllEmployees() {
 }
 
 // view by department
-function viewByDepartment() {
-    connection.query(`SELECT employees.id, employees.first_name, employees.last_name, departments.department_name 
+function viewAllDepartments() {
+    connection.query(`SELECT departments.department_name, employees.first_name, employees.last_name  
             FROM roles 
             JOIN departments 
             ON departments.id = roles.departments_id 
             JOIN employees 
             ON employees.roles_id = roles.id;`, function (err, results) {
-        if (err) 
-            throw err;
-        
+        if (err) {
+            throw err
+        };
 
 
         console.table(results);
@@ -92,14 +93,14 @@ function viewByDepartment() {
 }
 
 // view by role
-function viewByRole() {
-    connection.query(`SELECT employees.id, employees.first_name, employees.last_name, roles.title_name 
+function viewAllRoles() {
+    connection.query(`SELECT roles.title_name, employees.first_name, employees.last_name
             FROM employees 
             JOIN roles 
             ON employees.roles_id = roles.id;`, function (err, results) {
-        if (err) 
-            throw err;
-        
+        if (err) {
+            throw err
+        };
 
 
         console.table(results);
@@ -189,14 +190,14 @@ async function addEmployee() {
     }','${
         answers.manager
     }');`, function (err, results) {
-        if (err) 
-            throw err;
-        
+        if (err) {
+            throw err
+        };
 
-
-        console.table(results);
+        console.log("Employee Added!");
+        prompt();
     });
-    connection.end();
+
 }
 
 // add role
@@ -239,14 +240,14 @@ async function addRole() {
     }','${
         answers.departmentID
     }');`, function (err, results) {
-        if (err) 
-            throw err;
-        
+        if (err) {
+            throw err
+        };
 
 
-        console.table(results);
+        console.log("Role Added!");
+        prompt();
     });
-    connection.end();
 }
 
 // add department
@@ -260,12 +261,12 @@ async function addDepartment() {
             VALUES ('${
         answers.addDept
     }');`, function (err, results) {
-        if (err) 
-            throw err;
-        
+        if (err) {
+            throw err
+        };
 
-
-        console.table(results);
+        console.log("Department Added!");
+        prompt();
     });
 }
 
@@ -275,12 +276,11 @@ function updateEmployee() {
         {
             type: 'input',
             name: 'updateEmployee',
-            message: 'Enter ID of Employee to Update:'
-
+            message: 'Enter Employee ID to Update:'
         }, {
             type: 'input',
             name: "updateRole",
-            message: "Enter New Role ID:"
+            message: "Enter ID of New Role:"
         },
     ]).then(function (results) {
         const updateEmployee = results.updateEmployee;
@@ -289,14 +289,22 @@ function updateEmployee() {
         SET roles_id = '${updateRole}' 
         WHERE id = '${updateEmployee}'`;
         connection.query(queryUpdate, function (err, results) {
-            if (err) 
-                throw err;
-            
+            if (err) {
+                throw err
+            };
+
 
         })
 
-
+        console.log("Updated!")
         console.table(results);
         prompt();
     });
+}
+
+// exit function
+function leaveApp() {
+    console.log('Bye!')
+    connection.end()
+    process.exit();
 }
