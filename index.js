@@ -76,7 +76,7 @@ function viewAllEmployees() {
 
 // view by department
 function viewAllDepartments() {
-    connection.query(`SELECT departments.department_name, employees.first_name, employees.last_name  
+    connection.query(`SELECT departments.department_name, roles.title_name 
             FROM roles 
             JOIN departments 
             ON departments.id = roles.departments_id 
@@ -94,7 +94,7 @@ function viewAllDepartments() {
 
 // view by role
 function viewAllRoles() {
-    connection.query(`SELECT roles.title_name, employees.first_name, employees.last_name
+    connection.query(`SELECT roles.title_name, roles.salary
             FROM employees 
             JOIN roles 
             ON employees.roles_id = roles.id;`, function (err, results) {
